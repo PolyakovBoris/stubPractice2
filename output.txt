@@ -1,0 +1,8 @@
+{"login":"1","password":"aaa","date":"01.01.2023","email":"a@mail.ru"}
+{"login":"2","password":"aaa","date":"01.01.2023","email":"a@mail.ru"}
+{"login":"3","password":"aaa","date":"01.01.2023","email":"a@mail.ru"}
+{"login":"4","password":"ddd","date":"04.04.2023","email":"d@mail.ru"}
+{"login":"5","password":"eee","date":"05.05.2023","email":"e@mail.ru"}
+{"login":"6","password":"aaa","date":"01.01.2023","email":"a@mail.ru"}
+{"login":"b","password":"bbb","date":"02.02.2023","email":"b@mail.ru"}
+{"login":"c","password":"ccc","date":"03.03.2023","email":"c@mail.ru"}

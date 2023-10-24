@@ -1,6 +1,10 @@
 package stub2.Controllers;
 
+import stub2.Models.SaveUserInfo;
 import stub2.Models.User;
+
+
+import java.io.FileNotFoundException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +20,7 @@ public class QueryPostgres {
         ResultSet result1 = null;
         Statement statement = null;
         User user = null;
+
         try {
 
             statement = newConnection.getConnection().createStatement();
@@ -25,9 +30,9 @@ public class QueryPostgres {
                     "ON user_login.login = email.login " +
                     "WHERE user_login.login = '%s'", login);
             result1 = statement.executeQuery(query);
-            System.out.println(result1.getMetaData());
             System.out.println("Выводим statement");
             boolean empty = true;
+            SaveUserInfo saveUser = new SaveUserInfo();
             while (result1.next()) {
                 System.out.println("Номер в выборке #" + result1.getRow()
                         + "\t Логин в базе #" + result1.getString("login")
@@ -35,13 +40,14 @@ public class QueryPostgres {
                 user = new User(result1.getString("login"), result1.getString("password"),
                         result1.getString("date"), result1.getString("email"));
                 empty = false;
+                saveUser.saveToFile(user);
             }
-            if (empty) {throw new InvalidQueryException(" Логин не найден в БД ");}
-        }
-
-        catch (SQLException e) {
+            if (empty) {
+                throw new InvalidQueryException(" Логин не найден в БД ");
+            }
+        } catch (SQLException e) {
             throw new RuntimeException(e);
-        }  finally {
+        } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
@@ -57,7 +63,7 @@ public class QueryPostgres {
         int counterInsert = 0;
 
         try (PreparedStatement preparedStatement = newConnection.getConnection().prepareStatement(
-                "INSERT INTO user_login values(?, ?, ?); INSERT INTO email values(?, ?)")){
+                "INSERT INTO user_login values(?, ?, ?); INSERT INTO email values(?, ?)")) {
             preparedStatement.setString(1, user.getLogin());
 
             preparedStatement.setString(2, user.getPassword());
@@ -74,7 +80,7 @@ public class QueryPostgres {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-            }
+        }
         return user + String.format("\ninserted rows - %s", counterInsert);
     }
 }
